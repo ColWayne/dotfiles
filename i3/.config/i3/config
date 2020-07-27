@@ -1,0 +1,195 @@
+# minimal i3 configurations
+# GRUVBOX theme colors are set at the end
+
+# Set mod keys (Mod1=<Alt>, Mod4=<Super>)
+set $mod Mod1
+
+# You can also use any non-zero value if you'd like to have a border
+for_window [class=".*"] border pixel 0
+
+gaps inner 20
+gaps outer 1
+
+# terminal
+bindsym $mod+Return exec konsole
+
+# rofi
+#bindsym $mod+Up exec --no-startup-id rofi -show run
+# dmenu
+bindsym $mod+d exec dmenu_run
+# kill container
+bindsym $mod+Down kill
+
+# restart i3 inplace 
+bindsym $mod+Shift+r restart
+# exit i3
+bindsym $mod+Control+Escape exec i3-msg exit
+# kill xorg server
+bindsym $mod+Shift+Escape exec pkill -15 Xorg
+
+# screenshot printscreen to ~/home
+bindsym Print exec --no-startup-id scrot
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen
+
+# vim key navigations
+# change focus
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# move focused window
+bindsym $mod+Control+h move left
+bindsym $mod+Control+j move down
+bindsym $mod+Control+k move up
+bindsym $mod+Control+l move right
+
+# scratchpad
+bindsym grave scratchpad show
+bindsym $mod+grave move scratchpad
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# new window split direction toggle
+bindsym $mod+t split toggle
+
+# floating windows
+floating_modifier $mod
+bindsym $mod+space floating toggle
+
+# switch to workspace
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+bindsym $mod+0 workspace 10
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+8 move container to workspace 8
+bindsym $mod+Shift+9 move container to workspace 9
+bindsym $mod+Shift+0 move container to workspace 10
+
+#######
+#THEME#
+#######
+
+# set primary gruvbox colorscheme colors
+set $bg #282828
+set $red #cc241d
+set $green #98971a
+set $yellow #d79921
+set $blue #458588
+set $purple #b16286
+set $aqua #689d68
+set $gray #a89984
+set $darkgray #1d2021
+
+# font used by i3 for titles and bars
+font pango:Hack 12
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+        # These bindings trigger as soon as you enter the resize mode
+
+        # Pressing left will shrink the window’s width.
+        # Pressing right will grow the window’s width.
+        # Pressing up will shrink the window’s height.
+        # Pressing down will grow the window’s height.
+        bindsym j resize shrink width 10 px or 10 ppt
+        bindsym k resize grow height 10 px or 10 ppt
+        bindsym l resize shrink height 10 px or 10 ppt
+        bindsym semicolon resize grow width 10 px or 10 ppt
+
+        # same bindings, but for the arrow keys
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Down resize grow height 10 px or 10 ppt
+        bindsym Up resize shrink height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
+
+        # back to normal: Enter or Escape or $mod+r
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        bindsym $mod+r mode "default"
+}
+
+bindsym $mod+r mode "resize"
+#start of bar section
+#bar {
+#    position bottom
+#    status_command i3blocks -c ~/.config/i3/i3blocks.conf
+#    colors {
+#        # bar background color
+#        background $bg
+#        # text color used for blocks that do not have a color specified.
+#        statusline $yellow
+#        # workspaces section            
+#        #                    border  backgr. text
+#        focused_workspace    $aqua $aqua $darkgray
+#        inactive_workspace   $darkgray $darkgray $yellow
+#        active_workspace     $darkgray $darkgray $yellow
+#        urgent_workspace     $red $red $bg
+#    }
+#}
+#end of bar section
+
+#start of window title bars & borders section
+
+# green gruvbox
+# class                 border|backgr|text|indicator|child_border
+#client.focused          $green $green $darkgray $purple $darkgray
+#client.focused_inactive $darkgray $darkgray $yellow $purple $darkgray
+#client.unfocused        $darkgray $darkgray $yellow $purple $darkgray
+#client.urgent           $red $red $white $red $red
+
+# blue gruvbox
+# class                 border|backgr|text|indicator|child_border
+client.focused          $blue $blue $darkgray $purple $darkgray
+client.focused_inactive $darkgray $darkgray $yellow $purple $darkgray
+client.unfocused        $darkgray $darkgray $yellow $purple $darkgray
+client.urgent           $red $red $white $red $red1
+
+exec --no-startup-id feh --bg-fill ~/wallpaper.jpg
+#end of window title bars & borders section
+
+# >>> Plasma Integration <<<
+
+## Plasma Integration
+# Try to kill the wallpaper set by Plasma (it takes up the entire workspace and hides everythiing)
+exec --no-startup-id wmctrl -c Plasma
+for_window [title="Desktop — Plasma"] kill, floating enable, border none
+
+# Avoid tiling popups, dropdown windows from plasma
+for_window [class="plasmashell"] floating enable
+for_window [class="Plasma"] floating enable
+for_window [class="krunner"] floating enable
+for_window [class="Kmix"] floating enable
+for_window [class="Klipper"] floating enable
+for_window [class="Plasmoidviewer"] floating enable
+
+# >>> Window Rules <<<
+
+# >>> Avoid tiling for non-Plasma stuff <<<
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="bubble"] floating enable
+for_window [window_role="task_dialog"] floating enable
+for_window [window_role="Preferences"] floating enable
+for_window [window_role="About"] floating enable 
+for_window [window_type="dialog"] floating enable
+for_window [window_type="menu"] floating enable
